@@ -8,37 +8,25 @@ import CompanionPanel from "./components/CompanionPanel";
 import ProgressPanel from "./components/ProgressPanel";
 import ProductFramework from "./components/ProductFramework";
 import Footer from "./components/Footer";
+import SceneUnderstandingPanel from "./components/SceneUnderstandingPanel";
+import MemoryPanel from "./components/MemoryPanel";
 import {
-  baseActionSteps,
+  contentExamples,
   feedbackTemplates,
-  goalExamples,
+  inputTypes,
+  memoryProfile,
   mockProgressStats,
   personas,
   productFlowSteps,
+  sceneActionMap,
 } from "./data/mockData";
-import type { ActionStep, FeedbackStage, PersonaId } from "./types";
+import type { ActionStep, ContentExample, FeedbackStage, InputTypeId, PersonaId, SceneUnderstanding } from "./types";
 
-const buildMockActionChain = (goalText: string): ActionStep[] => {
-  const cleanGoal = goalText.trim() || "今天开始一个小目标";
+const buildMockActionCards = (inputTypeId: InputTypeId): ActionStep[] =>
+  sceneActionMap[inputTypeId].steps.map((step) => ({ ...step }));
 
-  return baseActionSteps.map((step, index) => {
-    if (index === 0) {
-      return {
-        ...step,
-        title: `把「${cleanGoal}」改写成一个可验证结果`,
-      };
-    }
-
-    if (index === 2) {
-      return {
-        ...step,
-        microAction: `设置 5 分钟计时器，只处理「${cleanGoal}」相关的一个最小动作。`,
-      };
-    }
-
-    return step;
-  });
-};
+const resolveFeedback = (template: string, actionTitle: string): string =>
+  template.replace(/\{\{action\}\}/g, actionTitle);
 
 const getFeedbackStage = (
   hasGenerated: boolean,
@@ -61,12 +49,16 @@ const getFeedbackStage = (
 };
 
 function App() {
-  const [goal, setGoal] = useState("");
-  const [generatedGoal, setGeneratedGoal] = useState("");
+  const [content, setContent] = useState("");
+  const [generatedContent, setGeneratedContent] = useState("");
+  const [selectedInputTypeId, setSelectedInputTypeId] =
+    useState<InputTypeId>("competition");
   const [selectedPersonaId, setSelectedPersonaId] =
     useState<PersonaId>("friend");
   const [actionSteps, setActionSteps] = useState<ActionStep[]>([]);
   const [completedStepIds, setCompletedStepIds] = useState<string[]>([]);
+  const [sceneUnderstanding, setSceneUnderstanding] =
+    useState<SceneUnderstanding>(sceneActionMap.competition.scene);
 
   const selectedPersona = useMemo(
     () => personas.find((persona) => persona.id === selectedPersonaId) ?? personas[0],
@@ -84,16 +76,28 @@ function App() {
     completedCount,
     totalCount,
   );
-  const companionFeedback =
-    feedbackTemplates[selectedPersona.id][feedbackStage];
+  const currentAction =
+    actionSteps.find((step) => !completedStepIds.includes(step.id)) ??
+    actionSteps[0];
+  const currentActionTitle = currentAction?.title ?? "等待生成行动卡";
+  const rawFeedback = feedbackTemplates[selectedPersona.id][feedbackStage];
+  const companionFeedback = hasGenerated
+    ? resolveFeedback(rawFeedback, currentActionTitle)
+    : rawFeedback;
+
+  const handleSelectExample = (example: ContentExample) => {
+    setContent(example.content);
+    setSelectedInputTypeId(example.inputTypeId);
+  };
 
   const handleGenerate = () => {
-    const fallbackGoal = goalExamples[0].title;
-    const nextGoal = goal.trim() || fallbackGoal;
+    const fallbackContent = contentExamples[0].content;
+    const nextContent = content.trim() || fallbackContent;
 
-    setGoal(nextGoal);
-    setGeneratedGoal(nextGoal);
-    setActionSteps(buildMockActionChain(nextGoal));
+    setContent(nextContent);
+    setGeneratedContent(nextContent);
+    setActionSteps(buildMockActionCards(selectedInputTypeId));
+    setSceneUnderstanding(sceneActionMap[selectedInputTypeId].scene);
     setCompletedStepIds([]);
   };
 
@@ -110,51 +114,54 @@ function App() {
       <Header />
       <main>
         <HeroSection />
+        <ProductFramework steps={productFlowSteps} />
+        <GoalInputPanel
+          content={content}
+          inputTypes={inputTypes}
+          selectedInputTypeId={selectedInputTypeId}
+          examples={contentExamples}
+          generatedContent={generatedContent}
+          onContentChange={setContent}
+          onSelectInputType={setSelectedInputTypeId}
+          onSelectExample={handleSelectExample}
+          onGenerate={handleGenerate}
+        />
+        <SceneUnderstandingPanel
+          understanding={sceneUnderstanding}
+          hasGenerated={hasGenerated}
+        />
+        <ActionChain
+          steps={actionSteps}
+          completedStepIds={completedStepIds}
+          generatedContent={generatedContent}
+          onToggleStep={handleToggleStep}
+        />
 
-        <section className="workspace-section" id="prototype">
-          <div className="section-heading">
-            <p className="eyebrow">Interactive prototype</p>
-            <h2>从一个模糊目标，到一条能立刻开始的行动链</h2>
-          </div>
-
-          <div className="prototype-grid">
-            <GoalInputPanel
-              goal={goal}
-              examples={goalExamples}
-              generatedGoal={generatedGoal}
-              onGoalChange={setGoal}
-              onGenerate={handleGenerate}
+        <section className="companion-section" id="companion">
+          <PersonaSelector
+            personas={personas}
+            selectedPersonaId={selectedPersonaId}
+            onSelectPersona={setSelectedPersonaId}
+          />
+          <div className="companion-grid">
+            <CompanionPanel
+              persona={selectedPersona}
+              feedback={companionFeedback}
+              progressPercent={progressPercent}
+              completedCount={completedCount}
+              totalCount={totalCount}
+              currentActionTitle={currentActionTitle}
             />
-            <PersonaSelector
-              personas={personas}
-              selectedPersonaId={selectedPersonaId}
-              onSelectPersona={setSelectedPersonaId}
+            <ProgressPanel
+              completedCount={completedCount}
+              totalCount={totalCount}
+              progressPercent={progressPercent}
+              stats={mockProgressStats}
             />
-            <ActionChain
-              steps={actionSteps}
-              completedStepIds={completedStepIds}
-              goal={generatedGoal}
-              onToggleStep={handleToggleStep}
-            />
-            <aside className="side-stack">
-              <CompanionPanel
-                persona={selectedPersona}
-                feedback={companionFeedback}
-                progressPercent={progressPercent}
-                completedCount={completedCount}
-                totalCount={totalCount}
-              />
-              <ProgressPanel
-                completedCount={completedCount}
-                totalCount={totalCount}
-                progressPercent={progressPercent}
-                stats={mockProgressStats}
-              />
-            </aside>
           </div>
         </section>
 
-        <ProductFramework steps={productFlowSteps} />
+        <MemoryPanel items={memoryProfile} />
       </main>
       <Footer />
     </div>

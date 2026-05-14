@@ -16,10 +16,10 @@ function ProgressPanel({
   const completionRate = totalCount === 0 ? 0 : progressPercent;
 
   return (
-    <section className="panel progress-panel" aria-labelledby="progress-title">
+    <section className="progress-panel" aria-labelledby="progress-title">
       <div className="panel-heading">
-        <p className="panel-kicker">Today</p>
-        <h3 id="progress-title">进度记录</h3>
+        <p className="panel-kicker">Progress</p>
+        <h3 id="progress-title">完成进度</h3>
       </div>
 
       <div
@@ -35,20 +35,20 @@ function ProgressPanel({
 
       <div className="progress-number">
         <strong>{completedCount}</strong>
-        <span>/ {totalCount || stats.plannedToday} 个行动</span>
+        <span>/ {totalCount || stats.plannedToday} 张行动卡</span>
       </div>
 
       <div className="stats-grid">
         <div>
-          <span>今日完成率</span>
+          <span>完成率</span>
           <strong>{completionRate}%</strong>
         </div>
         <div>
-          <span>专注分钟</span>
+          <span>建议时间盒</span>
           <strong>{stats.focusMinutes}</strong>
         </div>
         <div>
-          <span>重新启动</span>
+          <span>重启次数</span>
           <strong>{stats.restartCount}</strong>
         </div>
       </div>

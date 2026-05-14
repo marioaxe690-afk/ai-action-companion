@@ -6,13 +6,17 @@ interface ProductFrameworkProps {
 
 function ProductFramework({ steps }: ProductFrameworkProps) {
   return (
-    <section className="framework-section" id="framework">
+    <section className="positioning-section" id="positioning">
       <div className="section-heading">
-        <p className="eyebrow">Product framework</p>
-        <h2>产品流程框架</h2>
+        <p className="eyebrow">Product positioning</p>
+        <h2>刷到即行动：AI 内容行动化助手</h2>
       </div>
 
-      <div className="flow-track" aria-label="产品流程">
+      <p className="positioning-copy">
+        用户可以输入短视频文案、截图通知、学习资料、比赛信息、项目灵感或生活目标。系统会将原始内容转化为行动卡、知识卡、任务链、项目方案或待办清单。
+      </p>
+
+      <div className="flow-track" aria-label="内容行动化流程">
         {steps.map((step, index) => (
           <article className="flow-step" key={step.id}>
             <span>{String(index + 1).padStart(2, "0")}</span>

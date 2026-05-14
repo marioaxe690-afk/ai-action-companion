@@ -6,6 +6,7 @@ interface CompanionPanelProps {
   progressPercent: number;
   completedCount: number;
   totalCount: number;
+  currentActionTitle: string;
 }
 
 function CompanionPanel({
@@ -14,15 +15,16 @@ function CompanionPanel({
   progressPercent,
   completedCount,
   totalCount,
+  currentActionTitle,
 }: CompanionPanelProps) {
   const progressLabel =
-    totalCount === 0 ? "等待行动链" : `${completedCount}/${totalCount} 已完成`;
+    totalCount === 0 ? "等待行动卡" : `${completedCount}/${totalCount} 已完成`;
 
   return (
-    <section className="panel companion-panel" aria-labelledby="companion-title">
+    <section className="companion-panel" aria-labelledby="companion-title">
       <div className="panel-heading">
         <p className="panel-kicker">Live feedback</p>
-        <h3 id="companion-title">陪伴反馈</h3>
+        <h3 id="companion-title">人设服务于行动</h3>
       </div>
 
       <div className="companion-card">
@@ -31,6 +33,11 @@ function CompanionPanel({
           <p className="companion-role">{persona.summary}</p>
         </div>
         <div className="progress-badge">{progressPercent}%</div>
+      </div>
+
+      <div className="current-action">
+        <span>当前行动卡</span>
+        <strong>{currentActionTitle}</strong>
       </div>
 
       <blockquote>{feedback}</blockquote>

@@ -12,10 +12,10 @@ function PersonaSelector({
   onSelectPersona,
 }: PersonaSelectorProps) {
   return (
-    <section className="panel persona-panel" aria-labelledby="persona-title">
-      <div className="panel-heading">
-        <p className="panel-kicker">Step 02</p>
-        <h3 id="persona-title">选择陪伴人设</h3>
+    <section className="persona-panel" aria-labelledby="persona-title">
+      <div className="section-heading compact-heading">
+        <p className="eyebrow">Execution tone</p>
+        <h2 id="persona-title">陪伴执行区</h2>
       </div>
 
       <div className="persona-grid" role="list">

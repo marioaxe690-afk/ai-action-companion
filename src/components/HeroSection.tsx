@@ -1,26 +1,51 @@
+const aiComparison = [
+  "你问，它答",
+  "输出一段文本",
+  "需要用户自己整理",
+  "用户自己决定下一步",
+  "问完关系中断",
+];
+
+const actionComparison = [
+  "你刷到，它转化",
+  "输出行动卡片",
+  "自动识别场景和需求",
+  "直接生成第一步行动",
+  "记录反馈，下次更懂你",
+];
+
 function HeroSection() {
   return (
     <section className="hero-section" id="top">
       <div className="hero-copy">
-        <p className="eyebrow">Hackathon Prototype v0.1</p>
-        <h1>AI 主动陪伴式行动助手</h1>
-        <p className="hero-slogan">把“我想做”拆成今天能开始的第一步。</p>
-        <div className="hero-points" aria-label="核心卖点">
-          <span>极小任务拆解</span>
-          <span>人设陪伴反馈</span>
-          <span>轻量行动记忆</span>
-        </div>
+        <p className="eyebrow">AI 内容行动化助手</p>
+        <h1>普通 AI 给你答案，我们把内容变成行动。</h1>
+        <p className="hero-slogan">
+          刷到即行动，是一个 AI 内容行动化工作台。它把视频、截图、通知、学习资料和灵感，转化为可执行的行动卡片、任务链和下一步计划。
+        </p>
+        <p className="hero-anchor">
+          3 分钟，把一条比赛通知变成 5 张可执行的行动卡。
+        </p>
       </div>
 
-      <div className="hero-board" aria-label="产品概念摘要">
-        <div className="board-label">Today start plan</div>
-        <div className="board-line strong">目标太大时，先别逼自己完整执行。</div>
-        <div className="board-line">系统只负责把下一步切到足够小。</div>
-        <div className="board-chip-row">
-          <span>2-5 min</span>
-          <span>Mock AI</span>
-          <span>No backend</span>
-        </div>
+      <div className="comparison-board" aria-label="普通 AI 与刷到即行动对比">
+        <article className="comparison-column muted-column">
+          <div className="comparison-label">普通 AI</div>
+          <ul>
+            {aiComparison.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </article>
+
+        <article className="comparison-column action-column">
+          <div className="comparison-label">刷到即行动</div>
+          <ul>
+            {actionComparison.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </article>
       </div>
     </section>
   );

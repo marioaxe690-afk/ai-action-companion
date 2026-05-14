@@ -1,4 +1,12 @@
-export type PersonaId = "strict" | "friend" | "neko" | "observer";
+export type PersonaId = "strict" | "friend" | "observer" | "partner";
+
+export type InputTypeId =
+  | "competition"
+  | "study"
+  | "campus"
+  | "short-video"
+  | "idea"
+  | "life";
 
 export interface Persona {
   id: PersonaId;
@@ -6,20 +14,42 @@ export interface Persona {
   role: string;
   summary: string;
   signal: string;
+  actionFeedback: string;
 }
 
-export interface GoalExample {
+export interface ContentInputType {
+  id: InputTypeId;
+  label: string;
+  description: string;
+  isPrimary?: boolean;
+}
+
+export interface ContentExample {
   id: string;
   title: string;
   hint: string;
+  content: string;
+  inputTypeId: InputTypeId;
 }
 
 export interface ActionStep {
   id: string;
   title: string;
-  microAction: string;
-  estimateMinutes: number;
   reason: string;
+  estimateMinutes: number;
+  firstStep: string;
+  completionCriteria: string;
+  risk: string;
+  nextStep: string;
+}
+
+export interface SceneUnderstanding {
+  contentType: string;
+  userIntent: string[];
+  recommendedTransform: string[];
+  urgency: string;
+  riskJudgement: string[];
+  suitableTracks: string[];
 }
 
 export interface ProductFlowStep {
@@ -32,6 +62,11 @@ export interface ProgressStats {
   plannedToday: number;
   focusMinutes: number;
   restartCount: number;
+}
+
+export interface MemoryProfileItem {
+  label: string;
+  value: string;
 }
 
 export type FeedbackStage = "empty" | "started" | "halfway" | "done";

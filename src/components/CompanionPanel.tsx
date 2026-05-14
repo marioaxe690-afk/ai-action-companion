@@ -19,12 +19,18 @@ function CompanionPanel({
 }: CompanionPanelProps) {
   const progressLabel =
     totalCount === 0 ? "等待行动卡" : `${completedCount}/${totalCount} 已完成`;
+  const nextPrompt =
+    totalCount === 0
+      ? "先把内容转成行动卡。"
+      : completedCount === totalCount
+        ? "记录这次有效的执行方式。"
+        : "完成当前卡后再进入下一张。";
 
   return (
     <section className="companion-panel" aria-labelledby="companion-title">
       <div className="panel-heading">
         <p className="panel-kicker">Live feedback</p>
-        <h3 id="companion-title">人设服务于行动</h3>
+        <h3 id="companion-title">实时执行反馈</h3>
       </div>
 
       <div className="companion-card">
@@ -41,7 +47,10 @@ function CompanionPanel({
       </div>
 
       <blockquote>{feedback}</blockquote>
-      <p className="feedback-meta">{progressLabel}</p>
+      <div className="feedback-footer">
+        <p className="feedback-meta">{progressLabel}</p>
+        <p className="next-prompt">下一步提示：{nextPrompt}</p>
+      </div>
     </section>
   );
 }

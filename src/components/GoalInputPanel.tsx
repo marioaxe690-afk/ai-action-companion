@@ -32,7 +32,10 @@ function GoalInputPanel({
 
       <div className="input-workbench">
         <div className="input-type-panel">
-          <p className="field-label">输入类型</p>
+          <div className="panel-heading inline-heading">
+            <p className="panel-kicker">Input mode</p>
+            <h3>输入类型</h3>
+          </div>
           <div className="type-grid" role="list">
             {inputTypes.map((type) => {
               const isActive = type.id === selectedInputTypeId;
@@ -56,6 +59,12 @@ function GoalInputPanel({
         </div>
 
         <div className="content-editor-panel">
+          <div className="console-bar" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <strong>Content Console</strong>
+          </div>
           <label className="field-label" htmlFor="content-input">
             粘贴你刷到、看到、想到的内容
           </label>
@@ -63,10 +72,11 @@ function GoalInputPanel({
             id="content-input"
             value={content}
             onChange={(event) => onContentChange(event.target.value)}
-            placeholder="例如：我收到一个 AI 黑客松比赛通知，需要报名、组队、确定方向和准备 Demo，但现在不知道从哪一步开始。"
+            placeholder="> 粘贴你刷到的内容、截图文字或灵感..."
             rows={7}
           />
 
+          <p className="example-title">示例内容</p>
           <div className="example-list" aria-label="示例内容">
             {examples.map((example) => (
               <button
@@ -82,7 +92,7 @@ function GoalInputPanel({
           </div>
 
           <button className="primary-action" type="button" onClick={onGenerate}>
-            生成行动卡
+            生成行动卡 →
           </button>
 
           {generatedContent ? (

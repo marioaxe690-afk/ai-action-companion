@@ -19,7 +19,10 @@ function ProductFramework({ steps }: ProductFrameworkProps) {
       <div className="flow-track" aria-label="内容行动化流程">
         {steps.map((step, index) => (
           <article className="flow-step" key={step.id}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
+            <div className="flow-step-top">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <b className="flow-icon" aria-hidden="true" />
+            </div>
             <h3>{step.title}</h3>
             <p>{step.description}</p>
           </article>

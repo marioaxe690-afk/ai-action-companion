@@ -17,6 +17,7 @@ function PersonaSelector({
         <p className="eyebrow">Execution tone</p>
         <h2 id="persona-title">陪伴执行区</h2>
       </div>
+      <p className="panel-description">执行模式选择</p>
 
       <div className="persona-grid" role="list">
         {personas.map((persona) => {

@@ -20,7 +20,14 @@ import {
   productFlowSteps,
   sceneActionMap,
 } from "./data/mockData";
-import type { ActionStep, ContentExample, FeedbackStage, InputTypeId, PersonaId, SceneUnderstanding } from "./types";
+import type {
+  ActionStep,
+  ContentExample,
+  FeedbackStage,
+  InputTypeId,
+  PersonaId,
+  SceneUnderstanding,
+} from "./types";
 
 const buildMockActionCards = (inputTypeId: InputTypeId): ActionStep[] =>
   sceneActionMap[inputTypeId].steps.map((step) => ({ ...step }));
@@ -84,10 +91,29 @@ function App() {
   const companionFeedback = hasGenerated
     ? resolveFeedback(rawFeedback, currentActionTitle)
     : rawFeedback;
+  const remainingMinutes = actionSteps
+    .filter((step) => !completedStepIds.includes(step.id))
+    .reduce((sum, step) => sum + step.estimateMinutes, 0);
 
   const handleSelectExample = (example: ContentExample) => {
     setContent(example.content);
     setSelectedInputTypeId(example.inputTypeId);
+    setSceneUnderstanding(sceneActionMap[example.inputTypeId].scene);
+
+    if (hasGenerated) {
+      setActionSteps(buildMockActionCards(example.inputTypeId));
+      setCompletedStepIds([]);
+    }
+  };
+
+  const handleSelectInputType = (inputTypeId: InputTypeId) => {
+    setSelectedInputTypeId(inputTypeId);
+    setSceneUnderstanding(sceneActionMap[inputTypeId].scene);
+
+    if (hasGenerated) {
+      setActionSteps(buildMockActionCards(inputTypeId));
+      setCompletedStepIds([]);
+    }
   };
 
   const handleGenerate = () => {
@@ -122,7 +148,7 @@ function App() {
           examples={contentExamples}
           generatedContent={generatedContent}
           onContentChange={setContent}
-          onSelectInputType={setSelectedInputTypeId}
+          onSelectInputType={handleSelectInputType}
           onSelectExample={handleSelectExample}
           onGenerate={handleGenerate}
         />
@@ -156,6 +182,9 @@ function App() {
               completedCount={completedCount}
               totalCount={totalCount}
               progressPercent={progressPercent}
+              currentActionTitle={currentActionTitle}
+              currentSceneType={sceneUnderstanding.contentType}
+              remainingMinutes={remainingMinutes}
               stats={mockProgressStats}
             />
           </div>

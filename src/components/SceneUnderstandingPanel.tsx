@@ -25,31 +25,38 @@ function SceneUnderstandingPanel({
       </div>
 
       {hasGenerated ? (
-        <div className="scene-grid">
-          <article className="scene-cell strong-cell">
-            <span>内容类型</span>
-            <strong>{understanding.contentType}</strong>
-          </article>
-          <article className="scene-cell">
-            <span>用户意图</span>
-            {renderList(understanding.userIntent)}
-          </article>
-          <article className="scene-cell">
-            <span>推荐转化</span>
-            {renderList(understanding.recommendedTransform)}
-          </article>
-          <article className="scene-cell strong-cell">
-            <span>紧急程度</span>
-            <strong>{understanding.urgency}</strong>
-          </article>
-          <article className="scene-cell">
-            <span>风险判断</span>
-            {renderList(understanding.riskJudgement)}
-          </article>
-          <article className="scene-cell">
-            <span>适合赛道</span>
-            {renderList(understanding.suitableTracks)}
-          </article>
+        <div className="scene-console">
+          <div className="scene-status">
+            <span className="live-dot" />
+            <strong>Analyzing content...</strong>
+            <small>Mock AI Understanding</small>
+          </div>
+          <div className="scene-grid">
+            <article className="scene-cell strong-cell">
+              <span>内容类型</span>
+              <strong>{understanding.contentType}</strong>
+            </article>
+            <article className="scene-cell">
+              <span>用户意图</span>
+              {renderList(understanding.userIntent)}
+            </article>
+            <article className="scene-cell">
+              <span>推荐转化</span>
+              {renderList(understanding.recommendedTransform)}
+            </article>
+            <article className="scene-cell strong-cell">
+              <span>紧急程度</span>
+              <strong>{understanding.urgency}</strong>
+            </article>
+            <article className="scene-cell">
+              <span>风险判断</span>
+              {renderList(understanding.riskJudgement)}
+            </article>
+            <article className="scene-cell">
+              <span>适合赛道</span>
+              {renderList(understanding.suitableTracks)}
+            </article>
+          </div>
         </div>
       ) : (
         <div className="empty-state wide-empty">

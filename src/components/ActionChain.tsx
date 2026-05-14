@@ -46,29 +46,29 @@ function ActionChain({
                   key={step.id}
                 >
                   <div className="card-topline">
-                    <span>行动卡 {index + 1}</span>
-                    <span>{step.estimateMinutes} 分钟</span>
+                    <span>ACTION {String(index + 1).padStart(2, "0")}</span>
+                    <span className="time-badge">{step.estimateMinutes} 分钟</span>
                   </div>
                   <h3>{step.title}</h3>
 
                   <dl className="action-card-details">
-                    <div>
+                    <div className="detail-row">
                       <dt>为什么要做</dt>
                       <dd>{step.reason}</dd>
                     </div>
-                    <div>
+                    <div className="detail-row">
                       <dt>第一步</dt>
                       <dd>{step.firstStep}</dd>
                     </div>
-                    <div>
+                    <div className="detail-row detail-success">
                       <dt>完成标准</dt>
                       <dd>{step.completionCriteria}</dd>
                     </div>
-                    <div>
+                    <div className="detail-row detail-risk">
                       <dt>风险提示</dt>
                       <dd>{step.risk}</dd>
                     </div>
-                    <div>
+                    <div className="detail-row">
                       <dt>下一步</dt>
                       <dd>{step.nextStep}</dd>
                     </div>
